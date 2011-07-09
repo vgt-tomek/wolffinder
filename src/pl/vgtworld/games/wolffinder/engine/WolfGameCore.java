@@ -36,6 +36,7 @@ public class WolfGameCore
 		this.map = map;
 		gfxEngine.setMap(map);
 		position.setLocation(map.getStartPosition().getX() + 0.5, map.getStartPosition().getY() + 0.5);
+		angle = 0;
 		}
 	@Override public void update(long elapsedTime)
 		{

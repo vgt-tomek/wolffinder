@@ -24,6 +24,7 @@ public class MainWindow
 	{
 	private static final long serialVersionUID = 1L;
 	private WolfGameCore gameCore = new WolfGameCore();
+	private Map map = null;
 	private JLabel label = new JLabel("Wilczek", JLabel.CENTER);
 	private Thread mainLoopThread = null;
 	private JButton start = new JButton();
@@ -69,6 +70,7 @@ public class MainWindow
 		if (mainLoopThread == null)
 			{
 			remove(label);
+			gameCore.setMap(map);
 			add(gameCore.getScreenManager().getCanvas());
 			gameCore.getScreenManager().getCanvas().revalidate();
 			
@@ -130,7 +132,7 @@ public class MainWindow
 						return;
 						}
 					else
-						gameCore.setMap(map);
+						MainWindow.this.map = map;
 					}
 				catch (IOException e)
 					{

@@ -3,6 +3,7 @@ package pl.vgtworld.games.wolffinder.engine;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import pl.vgtworld.gamecore.Action;
 import pl.vgtworld.gamecore.GameCore;
 import pl.vgtworld.games.wolffinder.engine.GraphicEngine;
@@ -19,7 +20,9 @@ public class WolfGameCore
 	private Map map = null;
 	private Point2D position = new Point2D.Double();
 	private float angle = 0;
+	private long counter = 0;
 	private boolean drawDebug = false;
+	private ArrayList<Action> actions = new ArrayList<Action>();
 	Action actionForward = new Action();
 	Action actionBack = new Action();
 	Action actionLeft = new Action();
@@ -30,6 +33,13 @@ public class WolfGameCore
 	public WolfGameCore()
 		{
 		createInputManager();
+		actions.add(actionForward);
+		actions.add(actionBack);
+		actions.add(actionLeft);
+		actions.add(actionRight);
+		actions.add(actionMoveSideways);
+		actions.add(actionRun);
+		actions.add(actionDebug);
 		}
 	public void setMap(Map map)
 		{
@@ -37,12 +47,17 @@ public class WolfGameCore
 		gfxEngine.setMap(map);
 		position.setLocation(map.getStartPosition().getX() + 0.5, map.getStartPosition().getY() + 0.5);
 		angle = 0;
+		counter = 0;
 		}
 	@Override public void update(long elapsedTime)
 		{
 		double x = position.getX();
 		double y = position.getY();
 		keysActions(elapsedTime);
+		if (isAnyKeyPressed() && counter == 0)
+			counter = 1;
+		if (counter > 0)
+			counter+= elapsedTime;
 		if (map.getWall((int)position.getX(), (int)position.getY()) > 0)
 			position.setLocation(x, y);
 		else
@@ -53,6 +68,8 @@ public class WolfGameCore
 		gfxEngine.setLookAngle(angle);
 		gfxEngine.setPosition(position.getX(), position.getY());
 		gfxEngine.draw(g, screenManager.getWidth(), screenManager.getHeight());
+		float time = (counter / 100) / 10.0f;
+		g.drawString("" + time, 0, 10);
 		if (drawDebug)
 			drawDebug(g);
 		}
@@ -106,6 +123,13 @@ public class WolfGameCore
 			{
 			drawDebug = !drawDebug;
 			}
+		}
+	private boolean isAnyKeyPressed()
+		{
+		for (Action action : actions)
+			if (action.isPressed())
+				return true;
+		return false;
 		}
 	private void wallCollisions()
 		{

@@ -46,9 +46,11 @@ public class MainWindow
 		
 		start.setText("start");
 		start.setFocusable(false);
+		start.setEnabled(false);
 		start.addActionListener(new ActionStartGame());
 		stop.setText("stop");
 		stop.setFocusable(false);
+		stop.setEnabled(false);
 		stop.addActionListener(new ActionStopGame());
 		loadMap.setText("Load map");
 		loadMap.setFocusable(false);
@@ -76,6 +78,11 @@ public class MainWindow
 			
 			mainLoopThread = new Thread(gameCore);
 			mainLoopThread.start();
+			
+			start.setEnabled(false);
+			stop.setEnabled(true);
+			loadMap.setEnabled(false);
+			editor.setEnabled(false);
 			}
 		}
 	private void stopGame()
@@ -89,6 +96,10 @@ public class MainWindow
 			
 			gameCore.stop();
 			mainLoopThread = null;
+			start.setEnabled(true);
+			stop.setEnabled(false);
+			loadMap.setEnabled(true);
+			editor.setEnabled(true);
 			}
 		}
 	private class ActionStartGame
@@ -132,7 +143,10 @@ public class MainWindow
 						return;
 						}
 					else
+						{
 						MainWindow.this.map = map;
+						start.setEnabled(true);
+						}
 					}
 				catch (IOException e)
 					{

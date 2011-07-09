@@ -31,7 +31,6 @@ public class EditorWindow
 		mapPanel.addMouseMotionListener(listener);
 		mapPanel.addMouseListener(listener);
 		
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		

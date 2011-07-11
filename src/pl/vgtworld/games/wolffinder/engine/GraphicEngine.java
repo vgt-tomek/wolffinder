@@ -9,6 +9,7 @@ import pl.vgtworld.games.wolffinder.model.map.Map;
 
 public class GraphicEngine
 	{
+	private static final double PROJECTION_PLANE_DISTANCE = 10.0;
 	private Map map = null;
 	private Point2D position = new Point2D.Double();
 	private float fov = 60;
@@ -40,6 +41,9 @@ public class GraphicEngine
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, width, height);
 		g.setColor(Color.GREEN);
+		double verticalFov = fov / (width / (double)height);
+		double projectionPlaneHeight = (Math.sin(Math.toRadians(verticalFov/2)) * PROJECTION_PLANE_DISTANCE) * 2;
+		//System.out.println(verticalFov + " " + projectionPlaneHeight);
 		for (int i = 0; i < width; ++i)
 			{
 			double angleDifference = ((float)i / width) * fov - fov/2;
@@ -49,7 +53,7 @@ public class GraphicEngine
 			while (checkedAngle < 0) checkedAngle+= 360;
 			calculateDistanceToWall(wallStruct, checkedAngle);
 			double distance = removeFishEye(wallStruct.distance, Math.abs(angleDifference));
-			double wallPercentHeight = 1 / distance * (width / (double)height * 0.75);
+			double wallPercentHeight = (PROJECTION_PLANE_DISTANCE / distance) / projectionPlaneHeight;
 			int wallHeight = (int)(height * wallPercentHeight);
 			g.setColor(map.getCeilingColor());
 			g.drawLine(i, 0, i, (height - wallHeight) / 2);

@@ -26,8 +26,9 @@ public class ValidationWindow
 		{
 		this.parent = parent;
 		
+		setTitle(parent.getResourceBundle().getString("window.editor.validation.title"));
 		console.setPreferredSize(new Dimension(400, 400));
-		validate.setText("Validate");
+		validate.setText(parent.getResourceBundle().getString("window.editor.validation.button.validate"));
 		validate.addActionListener(new ActionValidate());
 		
 		buildGUI();
@@ -62,51 +63,51 @@ public class ValidationWindow
 			{
 			console.setText("");
 			
-			console.append("Checking start position... ");
+			console.append(parent.getResourceBundle().getString("window.editor.validation.message.startlocation") + "... ");
 			if (validator.validateStartPoint() == false)
 				{
-				console.append("ERROR\n\n");
-				console.append("Start position not set or inside a wall");
+				console.append(parent.getResourceBundle().getString("error") + "\n\n");
+				console.append(parent.getResourceBundle().getString("window.editor.validation.error.startposition"));
 				validate.setEnabled(true);
 				return;
 				}
 			else
-				console.append("OK\n");
+				console.append(parent.getResourceBundle().getString("ok") + "\n");
 			
-			console.append("Checking end position... ");
+			console.append(parent.getResourceBundle().getString("window.editor.validation.message.endlocation") + "... ");
 			if (validator.validateEndPoint() == false)
 				{
-				console.append("ERROR\n\n");
-				console.append("End position not set or inside a wall");
+				console.append(parent.getResourceBundle().getString("error") + "\n\n");
+				console.append(parent.getResourceBundle().getString("window.editor.validation.error.endposition"));
 				validate.setEnabled(true);
 				return;
 				}
 			else
-				console.append("OK\n");
+				console.append(parent.getResourceBundle().getString("ok") + "\n");
 			
-			console.append("Checking walkable area... ");
+			console.append(parent.getResourceBundle().getString("window.editor.validation.message.startendpath") + "... ");
 			if (validator.validateClearPath() == false)
 				{
-				console.append("ERROR\n\n");
-				console.append("Start and end position not connected");
+				console.append(parent.getResourceBundle().getString("error") + "\n\n");
+				console.append(parent.getResourceBundle().getString("window.editor.validation.error.startendpath"));
 				validate.setEnabled(true);
 				return;
 				}
 			else
-				console.append("OK\n");
+				console.append(parent.getResourceBundle().getString("ok") + "\n");
 			
-			console.append("Checking leaks... ");
+			console.append(parent.getResourceBundle().getString("window.editor.validation.message.leak") + "... ");
 			if (validator.validateLeaks() == false)
 				{
-				console.append("ERROR\n\n");
-				console.append("Walkable area not fully surrounded by walls");
+				console.append(parent.getResourceBundle().getString("error") + "\n\n");
+				console.append(parent.getResourceBundle().getString("window.editor.validation.error.leak"));
 				validate.setEnabled(true);
 				return;
 				}
 			else
-				console.append("OK\n");
+				console.append(parent.getResourceBundle().getString("ok") + "\n");
 			
-			console.append("Map validation sucesfull. Ready to play.");
+			console.append(parent.getResourceBundle().getString("window.editor.validation.message.success"));
 			validate.setEnabled(true);
 			}
 		}

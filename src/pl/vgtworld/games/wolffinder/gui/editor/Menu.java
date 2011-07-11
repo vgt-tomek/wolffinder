@@ -40,21 +40,21 @@ public class Menu
 		windowValidation = new ValidationWindow(parent);
 		
 		setActive(false);
-		buttonNewMap.setText("New map");
+		buttonNewMap.setText(parent.getResourceBundle().getString("window.editor.button.newmap"));
 		buttonNewMap.addActionListener(new ActionNewMap());
-		buttonSaveMap.setText("Save map");
+		buttonSaveMap.setText(parent.getResourceBundle().getString("window.editor.button.savemap"));
 		buttonSaveMap.addActionListener(new ActionSaveMap());
-		buttonLoadMap.setText("Load map");
+		buttonLoadMap.setText(parent.getResourceBundle().getString("window.editor.button.loadmap"));
 		buttonLoadMap.addActionListener(new ActionLoadMap());
-		buttonPutWall.setText("Put wall");
+		buttonPutWall.setText(parent.getResourceBundle().getString("window.editor.button.putwall"));
 		buttonPutWall.addActionListener(new ActionPutWall());
-		buttonRemoveWall.setText("Remove wall");
+		buttonRemoveWall.setText(parent.getResourceBundle().getString("window.editor.button.removewall"));
 		buttonRemoveWall.addActionListener(new ActionRemoveWall());
-		buttonStartLocation.setText("Start location");
+		buttonStartLocation.setText(parent.getResourceBundle().getString("window.editor.button.startlocation"));
 		buttonStartLocation.addActionListener(new ActionStart());
-		buttonFinishLocation.setText("Finish location");
+		buttonFinishLocation.setText(parent.getResourceBundle().getString("window.editor.button.finishlocation"));
 		buttonFinishLocation.addActionListener(new ActionFinish());
-		buttonValidateMap.setText("Validate map");
+		buttonValidateMap.setText(parent.getResourceBundle().getString("window.editor.button.validate"));
 		buttonValidateMap.addActionListener(new ActionValidate());
 		buildGUI();
 		}
@@ -100,7 +100,7 @@ public class Menu
 			{
 			if (parent.isModified())
 				{
-				int choice = JOptionPane.showConfirmDialog(parent, "Current map not saved. Continue?", "Error", JOptionPane.YES_NO_OPTION);
+				int choice = JOptionPane.showConfirmDialog(parent, parent.getResourceBundle().getString("window.editor.confirmation.notsaved"), parent.getResourceBundle().getString("window.editor.title"), JOptionPane.YES_NO_OPTION);
 				if (choice == JOptionPane.NO_OPTION)
 					return;
 				}
@@ -132,14 +132,14 @@ public class Menu
 					}
 				catch (IOException e)
 					{
-					JOptionPane.showMessageDialog(parent, "Can't save map", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(parent, parent.getResourceBundle().getString("window.editor.error.saveerror"), parent.getResourceBundle().getString("error"), JOptionPane.ERROR_MESSAGE);
 					return;
 					}
 				finally
 					{
 					try { stream.close(); } catch (IOException e) {}
 					}
-				JOptionPane.showMessageDialog(parent, "Map saved", "Information", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(parent, parent.getResourceBundle().getString("window.editor.message.mapsave"), parent.getResourceBundle().getString("window.editor.title"), JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		}
@@ -151,7 +151,7 @@ public class Menu
 			{
 			if (parent.isModified())
 				{
-				int choice = JOptionPane.showConfirmDialog(parent, "Current map not saved. Continue?", "Error", JOptionPane.YES_NO_OPTION);
+				int choice = JOptionPane.showConfirmDialog(parent, parent.getResourceBundle().getString("window.editor.confirmation.notsaved"), parent.getResourceBundle().getString("window.editor.title"), JOptionPane.YES_NO_OPTION);
 				if (choice == JOptionPane.NO_OPTION)
 					return;
 				}
@@ -169,12 +169,12 @@ public class Menu
 					}
 				catch (IOException e)
 					{
-					JOptionPane.showMessageDialog(parent, "Can't load map", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(parent, parent.getResourceBundle().getString("window.editor.error.loaderror"), parent.getResourceBundle().getString("error"), JOptionPane.ERROR_MESSAGE);
 					return;
 					}
 				catch (ClassNotFoundException e)
 					{
-					JOptionPane.showMessageDialog(parent, "Can't load map", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(parent, parent.getResourceBundle().getString("window.editor.error.loaderror"), parent.getResourceBundle().getString("error"), JOptionPane.ERROR_MESSAGE);
 					return;
 					}
 				finally
@@ -182,7 +182,7 @@ public class Menu
 					if (stream != null)
 						try { stream.close(); } catch (IOException e) {}
 					}
-				JOptionPane.showMessageDialog(parent, "Map loaded", "Information", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(parent, parent.getResourceBundle().getString("window.editor.message.mapload"), parent.getResourceBundle().getString("window.editor.title"), JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		}

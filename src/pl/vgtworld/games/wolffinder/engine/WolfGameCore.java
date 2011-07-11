@@ -6,8 +6,10 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import pl.vgtworld.gamecore.Action;
 import pl.vgtworld.gamecore.GameCore;
+import pl.vgtworld.games.wolffinder.data.Constants;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 
 
@@ -17,6 +19,7 @@ public class WolfGameCore
 	private static final double MINIMUM_WALL_DISTANCE = 0.1f;
 	private static final double MOVEMENT_SPEED = 2 / 1000d;
 	private static final double ROTATE_SPEED = 360 / 4000d;
+	private ResourceBundle lang = ResourceBundle.getBundle(Constants.languagesPackage);
 	private GraphicEngine gfxEngine = new GraphicEngine();
 	private Map map = null;
 	private Point2D position = new Point2D.Double();
@@ -91,8 +94,9 @@ public class WolfGameCore
 		Font fontFinished = new Font("Arial", Font.BOLD, 30);
 		g.setFont(fontFinished);
 		g.setColor(Color.WHITE);
-		g.drawString("Wolf found", (screenManager.getWidth() - "Wolf found".length() * 13) / 2, screenManager.getHeight() / 2 - 20);
-		String yourTime = "Your time is " + time + " seconds"; 
+		String message = lang.getString("win.message");
+		g.drawString(message, (screenManager.getWidth() - message.length() * 13) / 2, screenManager.getHeight() / 2 - 20);
+		String yourTime = String.format(lang.getString("win.time"), time); 
 		g.drawString(yourTime, (screenManager.getWidth() - yourTime.length() * 13) / 2, screenManager.getHeight() / 2 + 10);
 		}
 	@Override protected void init()

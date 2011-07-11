@@ -13,8 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import pl.vgtworld.games.wolffinder.data.Constants;
 import pl.vgtworld.games.wolffinder.engine.WolfGameCore;
 import pl.vgtworld.games.wolffinder.gui.editor.EditorWindow;
+import pl.vgtworld.games.wolffinder.model.ResourceBundle;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 import pl.vgtworld.games.wolffinder.model.map.MapValidator;
 
@@ -23,19 +25,20 @@ public class MainWindow
 	extends JFrame
 	{
 	private static final long serialVersionUID = 1L;
+	private ResourceBundle rb = new ResourceBundle(Constants.languagesPackage);
 	private WolfGameCore gameCore = new WolfGameCore();
 	private Map map = null;
-	private JLabel label = new JLabel("Wilczek", JLabel.CENTER);
+	private JLabel label = new JLabel("", JLabel.CENTER);
 	private Thread mainLoopThread = null;
 	private JButton start = new JButton();
 	private JButton stop = new JButton();
 	private JButton loadMap = new JButton();
 	private JButton editor = new JButton();
-	private EditorWindow editorWindow = new EditorWindow();
+	private EditorWindow editorWindow = new EditorWindow(this);
 	private JFileChooser mapFileChooser = new JFileChooser();
 	public MainWindow()
 		{
-		setTitle("Wilczek");
+		setTitle(rb.getString("name"));
 		setSize(800, 600);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -43,19 +46,19 @@ public class MainWindow
 		gameCore.setTicks(100);
 		addKeyListener(gameCore.getInputManager());
 
-		
-		start.setText("start");
+		label.setText(rb.getString("name"));
+		start.setText(rb.getString("window.main.button.start"));
 		start.setFocusable(false);
 		start.setEnabled(false);
 		start.addActionListener(new ActionStartGame());
-		stop.setText("stop");
+		stop.setText(rb.getString("window.main.button.stop"));
 		stop.setFocusable(false);
 		stop.setEnabled(false);
 		stop.addActionListener(new ActionStopGame());
-		loadMap.setText("Load map");
+		loadMap.setText(rb.getString("window.main.button.load"));
 		loadMap.setFocusable(false);
 		loadMap.addActionListener(new ActionLoadMap());
-		editor.setText("Map editor");
+		editor.setText(rb.getString("window.main.button.editor"));
 		editor.setFocusable(false);
 		editor.addActionListener(new ActionEditor());
 		
@@ -66,6 +69,10 @@ public class MainWindow
 		buttonsContainer.add(editor);
 		add(label);
 		add(buttonsContainer, BorderLayout.PAGE_END);
+		}
+	public ResourceBundle getResourceBundle()
+		{
+		return rb;
 		}
 	private void startGame()
 		{
@@ -139,7 +146,7 @@ public class MainWindow
 					validator.setMap(map);
 					if (validator.fullValidation() == false)
 						{
-						JOptionPane.showMessageDialog(MainWindow.this, "Map with errors. Validate in map editor for details", "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.mapinvalid"), rb.getString("error"), JOptionPane.ERROR_MESSAGE);
 						return;
 						}
 					else
@@ -150,12 +157,12 @@ public class MainWindow
 					}
 				catch (IOException e)
 					{
-					JOptionPane.showMessageDialog(MainWindow.this, "Error reading file", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.readerror"), rb.getString("Error"), JOptionPane.ERROR_MESSAGE);
 					return;
 					}
 				catch (ClassNotFoundException e)
 					{
-					JOptionPane.showMessageDialog(MainWindow.this, "Unknown file type", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.unknownformat"), rb.getString("Error"), JOptionPane.ERROR_MESSAGE);
 					return;
 					}
 				

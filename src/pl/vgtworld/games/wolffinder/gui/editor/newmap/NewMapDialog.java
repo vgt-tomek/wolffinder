@@ -5,30 +5,34 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import pl.vgtworld.games.wolffinder.gui.editor.EditorWindow;
 import pl.vgtworld.tools.GBC;
 
 public class NewMapDialog
 	extends JDialog
 	{
 	private static final long serialVersionUID = 1L;
+	private EditorWindow parent = null;
 	private JTextField width = new JTextField(8);
 	private JTextField height = new JTextField(8);
-	private JButton ok = new JButton("OK");
-	private JButton cancel = new JButton("Cancel");
+	private JButton ok = new JButton();
+	private JButton cancel = new JButton();
 	private boolean confirmed = false;
 	private int choosenWidth;
 	private int choosenHeight;
-	public NewMapDialog(JFrame parent)
+	public NewMapDialog(EditorWindow parent)
 		{
 		super(parent, true);
+		this.parent = parent;
 		
-		setTitle("New map");
+		setTitle(parent.getResourceBundle().getString("window.editor.newmap.title"));
+		ok.setText(parent.getResourceBundle().getString("ok"));
 		ok.addActionListener(new ActionOk());
+		cancel.setText(parent.getResourceBundle().getString("cancel"));
 		cancel.addActionListener(new ActionCancel());
 		
 		buildGUI();
@@ -62,8 +66,8 @@ public class NewMapDialog
 	private void buildGUI()
 		{
 		GBC gbc = new GBC();
-		JLabel widthLabel = new JLabel("Map width:");
-		JLabel heightLabel = new JLabel("Map height:");
+		JLabel widthLabel = new JLabel(parent.getResourceBundle().getString("window.editor.newmap.label.width"));
+		JLabel heightLabel = new JLabel(parent.getResourceBundle().getString("window.editor.newmap.label.height"));
 		JPanel buttonsContainer = new JPanel();
 		
 		buttonsContainer.add(ok);
@@ -119,12 +123,12 @@ public class NewMapDialog
 			convertFormData();
 			if (choosenWidth <= 0)
 				{
-				JOptionPane.showMessageDialog(NewMapDialog.this, "Width must be greater than 0", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(NewMapDialog.this, parent.getResourceBundle().getString("window.editor.newmap.error.width"), parent.getResourceBundle().getString("error"), JOptionPane.ERROR_MESSAGE);
 				return;
 				}
 			if (choosenHeight <= 0)
 				{
-				JOptionPane.showMessageDialog(NewMapDialog.this, "Height must be greater than 0", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(NewMapDialog.this, parent.getResourceBundle().getString("window.editor.newmap.error.height"), parent.getResourceBundle().getString("error"), JOptionPane.ERROR_MESSAGE);
 				return;
 				}
 			confirmed = true;

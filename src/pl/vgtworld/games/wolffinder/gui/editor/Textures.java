@@ -33,9 +33,9 @@ public class Textures
 		this.parent = parent;
 		setPreferredSize(new Dimension(200, 100));
 		
-		addTexture.setText("Add");
+		addTexture.setText(parent.getResourceBundle().getString("window.editor.button.addtexture"));
 		addTexture.addActionListener(new ActionAddTexture());
-		deleteTexture.setText("Delete");
+		deleteTexture.setText(parent.getResourceBundle().getString("window.editor.button.deletetexture"));
 		deleteTexture.addActionListener(new ActionDeleteTexture());
 		textureList.addMouseListener(new TextureListMouseAdapter());
 		textureList.setCellRenderer(new TextureListCellRenderer());
@@ -96,7 +96,7 @@ public class Textures
 					}
 				catch (IOException e)
 					{
-					JOptionPane.showMessageDialog(parent, "Can't open file", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(parent, parent.getResourceBundle().getString("window.editor.error.cantopentexturefile"), parent.getResourceBundle().getString("error"), JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}

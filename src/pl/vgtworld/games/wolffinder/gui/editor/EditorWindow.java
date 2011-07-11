@@ -5,7 +5,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import pl.vgtworld.games.wolffinder.gui.mainwindow.MainWindow;
 import pl.vgtworld.games.wolffinder.gui.mappanel.MapPanel;
+import pl.vgtworld.games.wolffinder.model.ResourceBundle;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 
 public class EditorWindow
@@ -16,14 +18,16 @@ public class EditorWindow
 	public static final int EDIT_MODE_START = 3;
 	public static final int EDIT_MODE_FINISH = 4;
 	private static final long serialVersionUID = 1L;
+	private MainWindow mainWindow = null;
 	private int currentMode = EDIT_MODE_PUT;
 	private Menu menu = null;
 	private Textures textures = null;
 	private Map map = null;
 	private MapPanel mapPanel = null;
 	private boolean mapModified = false;
-	public EditorWindow()
+	public EditorWindow(MainWindow mainWindow)
 		{
+		this.mainWindow = mainWindow;
 		menu = new Menu(this);
 		textures = new Textures(this);
 		mapPanel = new MapPanel();
@@ -33,8 +37,13 @@ public class EditorWindow
 		
 		setSize(800, 600);
 		setLocationRelativeTo(null);
+		setTitle(getResourceBundle().getString("window.editor.title"));
 		
 		buildGUI();
+		}
+	public ResourceBundle getResourceBundle()
+		{
+		return mainWindow.getResourceBundle();
 		}
 	public Map getMap()
 		{
@@ -102,7 +111,7 @@ public class EditorWindow
 				int textureIndex = textures.getSelectedTextureIndex();
 				if (textureIndex == -1)
 					{
-					JOptionPane.showMessageDialog(EditorWindow.this, "Texture not selected", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(EditorWindow.this, getResourceBundle().getString("window.editor.error.texturenotselected"), getResourceBundle().getString("error"), JOptionPane.ERROR_MESSAGE);
 					return;
 					}
 				int currentIndex = map.getWall(mapPanel.getMapX(), mapPanel.getMapY());

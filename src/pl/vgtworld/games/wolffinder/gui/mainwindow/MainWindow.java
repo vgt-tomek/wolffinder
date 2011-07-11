@@ -1,18 +1,14 @@
 package pl.vgtworld.games.wolffinder.gui.mainwindow;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import pl.vgtworld.games.wolffinder.data.Constants;
 import pl.vgtworld.games.wolffinder.engine.WolfGameCore;
 import pl.vgtworld.games.wolffinder.gui.editor.EditorWindow;
@@ -29,11 +25,8 @@ public class MainWindow
 	private WolfGameCore gameCore = new WolfGameCore();
 	private Map map = null;
 	private JLabel label = new JLabel("", JLabel.CENTER);
+	private Menu menu = new Menu(this);
 	private Thread mainLoopThread = null;
-	private JButton start = new JButton();
-	private JButton stop = new JButton();
-	private JButton loadMap = new JButton();
-	private JButton editor = new JButton();
 	private EditorWindow editorWindow = new EditorWindow(this);
 	private JFileChooser mapFileChooser = new JFileChooser();
 	public MainWindow()
@@ -47,34 +40,14 @@ public class MainWindow
 		addKeyListener(gameCore.getInputManager());
 
 		label.setText(rb.getString("name"));
-		start.setText(rb.getString("window.main.button.start"));
-		start.setFocusable(false);
-		start.setEnabled(false);
-		start.addActionListener(new ActionStartGame());
-		stop.setText(rb.getString("window.main.button.stop"));
-		stop.setFocusable(false);
-		stop.setEnabled(false);
-		stop.addActionListener(new ActionStopGame());
-		loadMap.setText(rb.getString("window.main.button.load"));
-		loadMap.setFocusable(false);
-		loadMap.addActionListener(new ActionLoadMap());
-		editor.setText(rb.getString("window.main.button.editor"));
-		editor.setFocusable(false);
-		editor.addActionListener(new ActionEditor());
 		
-		JPanel buttonsContainer = new JPanel();
-		buttonsContainer.add(start);
-		buttonsContainer.add(stop);
-		buttonsContainer.add(loadMap);
-		buttonsContainer.add(editor);
-		add(label);
-		add(buttonsContainer, BorderLayout.PAGE_END);
+		buildGUI();
 		}
 	public ResourceBundle getResourceBundle()
 		{
 		return rb;
 		}
-	private void startGame()
+	void startGame()
 		{
 		if (mainLoopThread == null)
 			{
@@ -85,14 +58,10 @@ public class MainWindow
 			
 			mainLoopThread = new Thread(gameCore);
 			mainLoopThread.start();
-			
-			start.setEnabled(false);
-			stop.setEnabled(true);
-			loadMap.setEnabled(false);
-			editor.setEnabled(false);
+			menu.fireButtonEnabledCheck(true);
 			}
 		}
-	private void stopGame()
+	void stopGame()
 		{
 		if (mainLoopThread != null)
 			{
@@ -103,79 +72,52 @@ public class MainWindow
 			
 			gameCore.stop();
 			mainLoopThread = null;
-			start.setEnabled(true);
-			stop.setEnabled(false);
-			loadMap.setEnabled(true);
-			editor.setEnabled(true);
+			menu.fireButtonEnabledCheck(false);
 			}
 		}
-	private class ActionStartGame
-		extends AbstractAction
+	void chooseMap()
 		{
-		private static final long serialVersionUID = 1L;
-		@Override public void actionPerformed(ActionEvent arg0)
+		int choice = mapFileChooser.showOpenDialog(MainWindow.this);
+		if (choice == JFileChooser.APPROVE_OPTION)
 			{
-			startGame();
-			}
-		}
-	private class ActionStopGame
-		extends AbstractAction
-		{
-		private static final long serialVersionUID = 1L;
-		@Override public void actionPerformed(ActionEvent e)
-			{
-			stopGame();
-			}
-		}
-	private class ActionLoadMap
-		extends AbstractAction
-		{
-		private static final long serialVersionUID = 1L;
-		@Override public void actionPerformed(ActionEvent event)
-			{
-			int choice = mapFileChooser.showOpenDialog(MainWindow.this);
-			if (choice == JFileChooser.APPROVE_OPTION)
+			try
 				{
-				try
-					{
-					File file = mapFileChooser.getSelectedFile();
-					ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
-					Map map = (Map)stream.readObject();
-					MapValidator validator = new MapValidator();
-					
-					validator.setMap(map);
-					if (validator.fullValidation() == false)
-						{
-						JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.mapinvalid"), rb.getString("error"), JOptionPane.ERROR_MESSAGE);
-						return;
-						}
-					else
-						{
-						MainWindow.this.map = map;
-						start.setEnabled(true);
-						}
-					}
-				catch (IOException e)
-					{
-					JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.readerror"), rb.getString("Error"), JOptionPane.ERROR_MESSAGE);
-					return;
-					}
-				catch (ClassNotFoundException e)
-					{
-					JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.unknownformat"), rb.getString("Error"), JOptionPane.ERROR_MESSAGE);
-					return;
-					}
+				File file = mapFileChooser.getSelectedFile();
+				ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
+				Map map = (Map)stream.readObject();
+				MapValidator validator = new MapValidator();
 				
+				validator.setMap(map);
+				if (validator.fullValidation() == false)
+					{
+					JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.mapinvalid"), rb.getString("error"), JOptionPane.ERROR_MESSAGE);
+					return;
+					}
+				else
+					{
+					MainWindow.this.map = map;
+					}
 				}
+			catch (IOException e)
+				{
+				JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.readerror"), rb.getString("Error"), JOptionPane.ERROR_MESSAGE);
+				return;
+				}
+			catch (ClassNotFoundException e)
+				{
+				JOptionPane.showMessageDialog(MainWindow.this, rb.getString("window.main.error.unknownformat"), rb.getString("Error"), JOptionPane.ERROR_MESSAGE);
+				return;
+				}
+			
 			}
 		}
-	private class ActionEditor
-		extends AbstractAction
+	void displayEditor()
 		{
-		private static final long serialVersionUID = 1L;
-		@Override public void actionPerformed(ActionEvent event)
-			{
-			editorWindow.setVisible(true);
-			}
+		editorWindow.setVisible(true);
+		}
+	private void buildGUI()
+		{
+		add(label, BorderLayout.CENTER);
+		add(menu, BorderLayout.PAGE_END);
 		}
 	}

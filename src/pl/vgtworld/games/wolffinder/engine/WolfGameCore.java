@@ -1,12 +1,13 @@
 package pl.vgtworld.games.wolffinder.engine;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import pl.vgtworld.gamecore.Action;
 import pl.vgtworld.gamecore.GameCore;
-import pl.vgtworld.games.wolffinder.engine.GraphicEngine;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 
 
@@ -22,6 +23,7 @@ public class WolfGameCore
 	private float angle = 0;
 	private long counter = 0;
 	private boolean drawDebug = false;
+	private boolean finished = false;
 	private ArrayList<Action> actions = new ArrayList<Action>();
 	Action actionForward = new Action();
 	Action actionBack = new Action();
@@ -48,20 +50,28 @@ public class WolfGameCore
 		position.setLocation(map.getStartPosition().getX() + 0.5, map.getStartPosition().getY() + 0.5);
 		angle = 0;
 		counter = 0;
+		finished = false;
 		}
 	@Override public void update(long elapsedTime)
 		{
 		double x = position.getX();
 		double y = position.getY();
+		
 		keysActions(elapsedTime);
-		if (isAnyKeyPressed() && counter == 0)
-			counter = 1;
-		if (counter > 0)
-			counter+= elapsedTime;
 		if (map.getWall((int)position.getX(), (int)position.getY()) > 0)
 			position.setLocation(x, y);
 		else
 			wallCollisions();
+		if (!finished)
+			{
+			if (isAnyKeyPressed() && counter == 0)
+				counter = 1;
+			if (counter > 0)
+				counter+= elapsedTime;
+			
+			if ((int)x == (int)map.getEndPosition().getX() && (int)y == (int)map.getEndPosition().getY())
+				finished = true;
+			}
 		}
 	@Override public void draw(Graphics2D g)
 		{
@@ -69,9 +79,21 @@ public class WolfGameCore
 		gfxEngine.setPosition(position.getX(), position.getY());
 		gfxEngine.draw(g, screenManager.getWidth(), screenManager.getHeight());
 		float time = (counter / 100) / 10.0f;
-		g.drawString("" + time, 0, 10);
+		if (finished)
+			drawFinished(g, time);
+		else
+			g.drawString("" + time, 0, 10);
 		if (drawDebug)
 			drawDebug(g);
+		}
+	private void drawFinished(Graphics2D g, float time)
+		{
+		Font fontFinished = new Font("Arial", Font.BOLD, 30);
+		g.setFont(fontFinished);
+		g.setColor(Color.WHITE);
+		g.drawString("Wolf found", (screenManager.getWidth() - "Wolf found".length() * 13) / 2, screenManager.getHeight() / 2 - 20);
+		String yourTime = "Your time is " + time + " seconds"; 
+		g.drawString(yourTime, (screenManager.getWidth() - yourTime.length() * 13) / 2, screenManager.getHeight() / 2 + 10);
 		}
 	@Override protected void init()
 		{

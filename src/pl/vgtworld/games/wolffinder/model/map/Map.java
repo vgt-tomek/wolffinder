@@ -5,6 +5,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import pl.vgtworld.gamecore.Sprite;
 import pl.vgtworld.games.wolffinder.model.texture.Texture;
 import pl.vgtworld.games.wolffinder.model.texture.TextureList;
 
@@ -21,6 +23,7 @@ public class Map
 	private Color floorColor = new Color(150, 150, 150);
 	private Color ceilingColor = new Color(200, 200, 200);
 	private TextureList textures = new TextureList();
+	private ArrayList<Sprite> sprites = new ArrayList<Sprite>();
 	transient private static Texture nullTexture = null;
 	static
 		{
@@ -64,6 +67,10 @@ public class Map
 	public int getWall(int x, int y)
 		{
 		return walls[x][y];
+		}
+	public ArrayList<Sprite> getSprites()
+		{
+		return sprites;
 		}
 	public BufferedImage getWallTextureThumb(int x, int y)
 		{
@@ -111,6 +118,12 @@ public class Map
 	public void setWall(int x, int y, int index)
 		{
 		walls[x][y] = index;
+		}
+	public void setEndPositionSprite(Sprite sprite)
+		{
+		sprite.setX((float)getEndPosition().getX());
+		sprite.setY((float)getEndPosition().getY());
+		sprites.add(sprite);
 		}
 	public void addTexture(Texture texture)
 		{

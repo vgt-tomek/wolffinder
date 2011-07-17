@@ -1,14 +1,18 @@
 package pl.vgtworld.games.wolffinder.gui.mainwindow;
 
 import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import pl.vgtworld.gamecore.Animation;
+import pl.vgtworld.gamecore.Sprite;
 import pl.vgtworld.games.wolffinder.data.Constants;
 import pl.vgtworld.games.wolffinder.engine.WolfGameCore;
 import pl.vgtworld.games.wolffinder.gui.editor.EditorWindow;
@@ -86,6 +90,14 @@ public class MainWindow
 				ObjectInputStream stream = new ObjectInputStream(new FileInputStream(file));
 				Map map = (Map)stream.readObject();
 				MapValidator validator = new MapValidator();
+				
+				//end position sprite
+				BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/pl/vgtworld/games/wolffinder/gui/mappanel/finish.png"));
+				Animation animation = new Animation();
+				animation.addFrame(image, 1000);
+				Sprite sprite = new Sprite();
+				sprite.addAnimation(0, animation);
+				map.setEndPositionSprite(sprite);
 				
 				validator.setMap(map);
 				if (validator.fullValidation() == false)

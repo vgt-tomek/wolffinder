@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
+import pl.vgtworld.gamecore.Sprite;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 
 
@@ -15,6 +16,8 @@ public class GraphicEngine
 	private float fov = 60;
 	private float lookAngle = 0;
 	private Wall wallStruct = new Wall();
+	private double[] zBuffer = null;
+	private double[] raysAngle = null;
 	public void setMap(Map map)
 		{
 		this.map = map;
@@ -43,6 +46,11 @@ public class GraphicEngine
 		g.setColor(Color.GREEN);
 		double verticalFov = fov / (width / (double)height);
 		double projectionPlaneHeight = (Math.sin(Math.toRadians(verticalFov/2)) * PROJECTION_PLANE_DISTANCE) * 2;
+		if (zBuffer == null || zBuffer.length != width)
+			{
+			zBuffer = new double[width];
+			raysAngle = new double[width];
+			}
 		//System.out.println(verticalFov + " " + projectionPlaneHeight);
 		for (int i = 0; i < width; ++i)
 			{
@@ -51,8 +59,10 @@ public class GraphicEngine
 			double checkedAngle = lookAngle + angleDifference;
 			while (checkedAngle > 360) checkedAngle-= 360;
 			while (checkedAngle < 0) checkedAngle+= 360;
+			raysAngle[i] = checkedAngle;
 			calculateDistanceToWall(wallStruct, checkedAngle);
 			double distance = removeFishEye(wallStruct.distance, Math.abs(angleDifference));
+			zBuffer[i] = distance;
 			double wallPercentHeight = (PROJECTION_PLANE_DISTANCE / distance) / projectionPlaneHeight;
 			int wallHeight = (int)(height * wallPercentHeight);
 			g.setColor(map.getCeilingColor());
@@ -84,6 +94,55 @@ public class GraphicEngine
 //						i, currentFloorPixel
 //						);
 //				}
+			}
+		for (Sprite sprite : map.getSprites())
+			{
+			if (raysAngle.length < 2)
+				continue;
+			
+			double spriteDistance = Math.sqrt(Math.pow(position.getX() - sprite.getX(), 2) + Math.pow(position.getY() - sprite.getY(), 2));
+			double spriteAzimuth = Math.toDegrees(Math.asin((Math.abs(position.getX() - sprite.getX())) / spriteDistance));
+			if (position.getX() <= sprite.getX() && position.getY() <= sprite.getY())
+				spriteAzimuth = 180 - spriteAzimuth;
+			else if (position.getX() >= sprite.getX() && position.getY() <= sprite.getY())
+				spriteAzimuth+= 180;
+			else if (position.getX() >= sprite.getX() && position.getY() >= sprite.getY())
+				spriteAzimuth = 360 - spriteAzimuth;
+			spriteDistance = removeFishEye(spriteDistance, Math.abs(spriteAzimuth - lookAngle));
+			
+			//if outside fov
+			if (
+					(raysAngle[0] < raysAngle[width - 1] && (spriteAzimuth < raysAngle[0] || spriteAzimuth > raysAngle[width - 1]))
+					|| (raysAngle[0] > raysAngle[width - 1] && spriteAzimuth < raysAngle[0] && spriteAzimuth > raysAngle[width - 1])
+					)
+				continue;
+			
+			//find ray with sprite position
+			int rayIndex = -1;
+			for (int i = 1; i < raysAngle.length; ++i)
+				if (spriteAzimuth > raysAngle[i - 1] && spriteAzimuth < raysAngle[i])
+					{
+					rayIndex = i;
+					break;
+					}
+			double wallPercentHeight = (PROJECTION_PLANE_DISTANCE / spriteDistance) / projectionPlaneHeight;
+			int spriteHeight = (int)(height * wallPercentHeight);
+			
+			int x = rayIndex - spriteHeight / 2;
+			int y = (height - spriteHeight) / 2;
+			g.drawImage(
+					sprite.getImage(),
+					x,
+					y,
+					x + spriteHeight,
+					y + spriteHeight,
+					0,
+					0,
+					sprite.getImage().getWidth(null),
+					sprite.getImage().getHeight(null),
+					null
+					);
+			
 			}
 //		g.drawString(""+lookAngle, 100, 100);
 //		g.drawString(""+calculateDistanceToWall(lookAngle), 100, 110);

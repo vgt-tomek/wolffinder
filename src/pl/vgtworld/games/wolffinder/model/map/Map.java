@@ -121,8 +121,8 @@ public class Map
 		}
 	public void setEndPositionSprite(Sprite sprite)
 		{
-		sprite.setX((float)getEndPosition().getX());
-		sprite.setY((float)getEndPosition().getY());
+		sprite.setX((float)getEndPosition().getX() + 0.5f);
+		sprite.setY((float)getEndPosition().getY() + 0.5f);
 		sprites.add(sprite);
 		}
 	public void addTexture(Texture texture)

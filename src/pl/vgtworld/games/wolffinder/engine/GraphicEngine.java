@@ -130,18 +130,31 @@ public class GraphicEngine
 			
 			int x = rayIndex - spriteHeight / 2;
 			int y = (height - spriteHeight) / 2;
-			g.drawImage(
-					sprite.getImage(),
-					x,
-					y,
-					x + spriteHeight,
-					y + spriteHeight,
-					0,
-					0,
-					sprite.getImage().getWidth(null),
-					sprite.getImage().getHeight(null),
-					null
-					);
+			int xStart = -1;
+			int xEnd = -1;
+			for (int i = x; i < x + spriteHeight; ++i)
+				{
+				if (i >= 0 && i < width && zBuffer[i] > spriteDistance)
+					{
+					if (xStart == -1)
+						xStart = i;
+					xEnd = i;
+					}
+				}
+			
+			if (xStart != -1 && xEnd > xStart)
+				g.drawImage(
+						sprite.getImage(),
+						xStart,
+						y,
+						xEnd,
+						y + spriteHeight,
+						(int)(((xStart-x)/(float)spriteHeight) * sprite.getImage().getWidth(null)),
+						0,
+						(int)(((xEnd-xStart)/(float)spriteHeight) * sprite.getImage().getWidth(null)),
+						sprite.getImage().getHeight(null),
+						null
+						);
 			
 			}
 //		g.drawString(""+lookAngle, 100, 100);

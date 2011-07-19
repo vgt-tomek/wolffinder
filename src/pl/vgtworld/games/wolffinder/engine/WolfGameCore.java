@@ -5,8 +5,10 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import javax.imageio.ImageIO;
 import pl.vgtworld.gamecore.Action;
 import pl.vgtworld.gamecore.GameCore;
 import pl.vgtworld.gamecore.Sprite;
@@ -20,6 +22,7 @@ public class WolfGameCore
 	private static final double MINIMUM_WALL_DISTANCE = 0.1f;
 	private static final double MOVEMENT_SPEED = 2 / 1000d;
 	private static final double ROTATE_SPEED = 360 / 4000d;
+	private static BufferedImage counterFont = null;
 	private ResourceBundle lang = ResourceBundle.getBundle(Constants.languagesPackage);
 	private GraphicEngine gfxEngine = new GraphicEngine();
 	private Map map = null;
@@ -36,6 +39,17 @@ public class WolfGameCore
 	Action actionMoveSideways = new Action();
 	Action actionRun = new Action();
 	Action actionDebug = new Action(Action.TYPE_INITIAL_PRESS_ONLY);
+	static
+		{
+		try
+			{
+			counterFont = ImageIO.read(GraphicEngine.class.getResourceAsStream("/pl/vgtworld/games/wolffinder/data/gfx/font.png"));
+			}
+		catch (Exception e)
+			{
+			counterFont = null;
+			}
+		}
 	public WolfGameCore()
 		{
 		createInputManager();
@@ -88,11 +102,35 @@ public class WolfGameCore
 		gfxEngine.setLookAngle(angle);
 		gfxEngine.setPosition(position.getX(), position.getY());
 		gfxEngine.draw(g, screenManager.getWidth(), screenManager.getHeight());
-		float time = (counter / 100) / 10.0f;
+		long time = (counter / 100);
 		if (finished)
-			drawFinished(g, time);
+			drawFinished(g, time / 10.0f);
 		else
-			g.drawString("" + time, 0, 10);
+			{
+			if (counterFont == null)
+				g.drawString("" + time / 10.0f, 0, 10);
+			else
+				{
+				int digitCounter = 0;
+				if (time > 0)
+					{
+					g.drawImage(counterFont, screenManager.getWidth() - 76, 0, screenManager.getWidth() - 38, 44, 0, 44*10, 38, 44*11, null);
+					if (time < 10)
+						g.drawImage(counterFont, screenManager.getWidth() - 114, 0, screenManager.getWidth() - 76, 44, 0, 0, 38, 44, null);
+					while (time > 0)
+						{
+						++digitCounter;
+						int digit = (int)(time % 10);
+						time = time / 10;
+						int x = screenManager.getWidth() - 38 * digitCounter;
+						if (digitCounter == 1)
+							g.drawImage(counterFont, x, 0, x + 38, 44, 0, 0 + digit*44, 38, 44 * (digit+1), null);
+						else
+							g.drawImage(counterFont, x - 38, 0, x, 44, 0, 0 + digit*44, 38, 44 * (digit+1), null);
+						}
+					}
+				}
+			}
 		if (drawDebug)
 			drawDebug(g);
 		}

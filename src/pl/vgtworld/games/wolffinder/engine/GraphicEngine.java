@@ -108,6 +108,8 @@ public class GraphicEngine
 				spriteAzimuth+= 180;
 			else if (position.getX() >= sprite.getX() && position.getY() >= sprite.getY())
 				spriteAzimuth = 360 - spriteAzimuth;
+			while (spriteAzimuth >= 360)
+				spriteAzimuth-= 360;
 			spriteDistance = removeFishEye(spriteDistance, Math.abs(spriteAzimuth - lookAngle));
 			
 			//if outside fov
@@ -120,7 +122,7 @@ public class GraphicEngine
 			//find ray with sprite position
 			int rayIndex = -1;
 			for (int i = 1; i < raysAngle.length; ++i)
-				if (spriteAzimuth > raysAngle[i - 1] && spriteAzimuth < raysAngle[i])
+				if (spriteAzimuth >= raysAngle[i - 1] && spriteAzimuth <= raysAngle[i])
 					{
 					rayIndex = i;
 					break;
@@ -142,20 +144,19 @@ public class GraphicEngine
 					}
 				}
 			
-			if (xStart != -1 && xEnd > xStart)
+			if (rayIndex >= 0 && xStart != -1 && xEnd > xStart)
 				g.drawImage(
 						sprite.getImage(),
 						xStart,
 						y,
-						xEnd,
+						xEnd + 1,
 						y + spriteHeight,
 						(int)(((xStart-x)/(float)spriteHeight) * sprite.getImage().getWidth(null)),
 						0,
-						(int)(((xEnd-xStart)/(float)spriteHeight) * sprite.getImage().getWidth(null)),
+						(int)(((xEnd-x)/(float)spriteHeight) * sprite.getImage().getWidth(null)),
 						sprite.getImage().getHeight(null),
 						null
 						);
-			
 			}
 //		g.drawString(""+lookAngle, 100, 100);
 //		g.drawString(""+calculateDistanceToWall(lookAngle), 100, 110);

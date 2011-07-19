@@ -92,9 +92,15 @@ public class MainWindow
 				MapValidator validator = new MapValidator();
 				
 				//end position sprite
-				BufferedImage image = ImageIO.read(getClass().getResourceAsStream("/pl/vgtworld/games/wolffinder/gui/mappanel/finish.png"));
+				BufferedImage frame1 = ImageIO.read(getClass().getResourceAsStream("/pl/vgtworld/games/wolffinder/data/gfx/sprites/wolf/frame1.png"));
+				BufferedImage frame2 = ImageIO.read(getClass().getResourceAsStream("/pl/vgtworld/games/wolffinder/data/gfx/sprites/wolf/frame2.png"));
+				BufferedImage frame3 = ImageIO.read(getClass().getResourceAsStream("/pl/vgtworld/games/wolffinder/data/gfx/sprites/wolf/frame3.png"));
+				BufferedImage frame4 = ImageIO.read(getClass().getResourceAsStream("/pl/vgtworld/games/wolffinder/data/gfx/sprites/wolf/frame4.png"));
 				Animation animation = new Animation();
-				animation.addFrame(image, 1000);
+				animation.addFrame(frame1, 100);
+				animation.addFrame(frame2, 100);
+				animation.addFrame(frame3, 100);
+				animation.addFrame(frame4, 100);
 				Sprite sprite = new Sprite();
 				sprite.addAnimation(0, animation);
 				map.setEndPositionSprite(sprite);

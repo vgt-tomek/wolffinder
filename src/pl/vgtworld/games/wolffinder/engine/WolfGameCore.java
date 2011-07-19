@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import pl.vgtworld.gamecore.Action;
 import pl.vgtworld.gamecore.GameCore;
+import pl.vgtworld.gamecore.Sprite;
 import pl.vgtworld.games.wolffinder.data.Constants;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 
@@ -74,6 +75,12 @@ public class WolfGameCore
 			
 			if ((int)x == (int)map.getEndPosition().getX() && (int)y == (int)map.getEndPosition().getY())
 				finished = true;
+			}
+		
+		ArrayList<Sprite> sprites = map.getSprites();
+		for (Sprite sprite : sprites)
+			{
+			sprite.update(elapsedTime);
 			}
 		}
 	@Override public void draw(Graphics2D g)

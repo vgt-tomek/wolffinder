@@ -122,7 +122,10 @@ public class GraphicEngine
 			//find ray with sprite position
 			int rayIndex = -1;
 			for (int i = 1; i < raysAngle.length; ++i)
-				if (spriteAzimuth >= raysAngle[i - 1] && spriteAzimuth <= raysAngle[i])
+				if (
+						(raysAngle[i-1] < raysAngle[i] && spriteAzimuth >= raysAngle[i - 1] && spriteAzimuth <= raysAngle[i])
+						|| (raysAngle[i-1] > raysAngle[i] && (spriteAzimuth >= raysAngle[i - 1] || spriteAzimuth <= raysAngle[i]))
+						)
 					{
 					rayIndex = i;
 					break;

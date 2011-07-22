@@ -13,53 +13,47 @@ import java.util.Map;
  */
 public class Sprite
 	{
-	private Map<Integer, Animation> oAnimations;
-	private int iActiveAnimation;
-	private float fX;
-	private float fY;
-	private float fDX;
-	private float fDY;
+	private Map<Integer, Animation> animations = new HashMap<Integer, Animation>();
+	private int activeAnimation = 0;
+	private float x = 0;
+	private float y = 0;
+	private float dx = 0;
+	private float dy = 0;
 	public Sprite()
 		{
 		this(null);
 		}
-	public Sprite(Animation oAnimation)
+	public Sprite(Animation animation)
 		{
-		oAnimations = new HashMap<Integer, Animation>();
-		iActiveAnimation = 0;
-		fX = 0;
-		fY = 0;
-		fDX = 0;
-		fDY = 0;
-		if (oAnimation != null)
+		if (animation != null)
 			{
-			addAnimation(1, oAnimation);
+			addAnimation(1, animation);
 			setActiveAnimation(1);
 			}
 		}
 	public int getScreenX()
 		{
-		return (int) fX;
+		return (int) x;
 		}
 	public int getScreenY()
 		{
-		return (int) fY;
+		return (int) y;
 		}
 	public float getX()
 		{
-		return fX;
+		return x;
 		}
 	public float getY()
 		{
-		return fY;
+		return y;
 		}
 	public float getDX()
 		{
-		return fDX;
+		return dx;
 		}
 	public float getDY()
 		{
-		return fDY;
+		return dy;
 		}
 	public int getWidth()
 		{
@@ -71,40 +65,40 @@ public class Sprite
 		}
 	public void setX(float fX)
 		{
-		this.fX = fX;
+		this.x = fX;
 		}
 	public void setY(float fY)
 		{
-		this.fY = fY;
+		this.y = fY;
 		}
 	public void setDX(float fDX)
 		{
-		this.fDX = fDX;
+		this.dx = fDX;
 		}
 	public void setDY(float fDY)
 		{
-		this.fDY = fDY;
+		this.dy = fDY;
 		}
-	public void addAnimation(int iKey, Animation oAnimation)
+	public void addAnimation(int key, Animation animation)
 		{
-		oAnimations.put(iKey, oAnimation);
+		animations.put(key, animation);
 		}
-	public void setActiveAnimation(int iKey)
+	public void setActiveAnimation(int key)
 		{
-		if (iActiveAnimation != iKey)
+		if (activeAnimation != key)
 			{
-			iActiveAnimation = iKey;
-			oAnimations.get(iKey).reset();
+			activeAnimation = key;
+			animations.get(key).reset();
 			}
 		}
-	public void update(long iElapsedTime)
+	public void update(long elapsedTime)
 		{
-		fX += fDX * iElapsedTime;
-		fY += fDY * iElapsedTime;
-		oAnimations.get(iActiveAnimation).update(iElapsedTime);
+		x += dx * elapsedTime;
+		y += dy * elapsedTime;
+		animations.get(activeAnimation).update(elapsedTime);
 		}
 	public Image getImage()
 		{
-		return oAnimations.get(iActiveAnimation).getImage();
+		return animations.get(activeAnimation).getImage();
 		}
 	}

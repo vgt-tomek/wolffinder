@@ -51,7 +51,6 @@ public class GraphicEngine
 			zBuffer = new double[width];
 			raysAngle = new double[width];
 			}
-		//System.out.println(verticalFov + " " + projectionPlaneHeight);
 		for (int i = 0; i < width; ++i)
 			{
 			double angleDifference = ((float)i / width) * fov - fov/2;
@@ -78,22 +77,6 @@ public class GraphicEngine
 						null, null
 						);
 				}
-//			int floorPixelCount = (height - wallHeight) / 2;
-//			double dx = wallStruct.xWallHit - position.getX();
-//			double dy = wallStruct.yWallHit - position.getY();
-//			for (int j = 0; j < floorPixelCount; ++j)
-//				{
-//				int currentFloorPixel = (wallHeight + (height - wallHeight) / 2) + j;
-//				double currentDistance = 1/(((currentFloorPixel - ((double)height - currentFloorPixel))/height)/(width / (double)height * 0.75));
-//				double floorX = Math.abs(wallStruct.xWallHit + dx * currentDistance/distance);
-//				double floorY = Math.abs(wallStruct.yWallHit + dy * currentDistance/distance);
-//				int color = map.getFloorPixel(floorX - (int)floorX, floorY - (int)floorY);
-//				g.setColor(new Color(color));
-//				g.drawLine(
-//						i, currentFloorPixel,
-//						i, currentFloorPixel
-//						);
-//				}
 			}
 		for (Sprite sprite : map.getSprites())
 			{
@@ -161,8 +144,6 @@ public class GraphicEngine
 						null
 						);
 			}
-//		g.drawString(""+lookAngle, 100, 100);
-//		g.drawString(""+calculateDistanceToWall(lookAngle), 100, 110);
 		}
 	private double removeFishEye(double distance, double angleFromCenter)
 		{
@@ -207,12 +188,8 @@ public class GraphicEngine
 			mapSquareDY = -1;
 			quarter = 4;
 			}
-//		System.out.println("quarter: " + quarter);
 		while (true)
 			{
-//			System.out.println("===================");
-//			System.out.println("Map square: " + xCurrentMapSquare + ", " + yCurrentMapSquare);
-//			System.out.println("Position: " + xCurrentMapPosition + ", " + yCurrentMapPosition);
 			switch (quarter)
 				{
 				case 1:
@@ -234,8 +211,6 @@ public class GraphicEngine
 				}
 			xEdgeCrossDistance = Math.abs(xEdgeDistance / Math.sin(Math.toRadians(angle)));
 			yEdgeCrossDistance = Math.abs(yEdgeDistance / Math.cos(Math.toRadians(angle)));
-//			System.out.println("Edge distance: " + xEdgeDistance + ", " + yEdgeDistance);
-//			System.out.println("Edge cross distance: " + xEdgeCrossDistance + ", " + yEdgeCrossDistance);
 			if (xEdgeCrossDistance < yEdgeCrossDistance)
 				{
 				xCurrentMapSquare += mapSquareDX;
@@ -256,7 +231,6 @@ public class GraphicEngine
 					yCurrentMapPosition = yCurrentMapSquare + 1;
 				totalDistance += yEdgeCrossDistance;
 				}
-//			System.out.println("total distance: " + totalDistance);
 			if (xCurrentMapSquare < 0 || xCurrentMapSquare >= map.getWidth()
 					|| yCurrentMapSquare < 0 || yCurrentMapSquare >= map.getHeight()
 					)
@@ -275,18 +249,17 @@ public class GraphicEngine
 				else
 					textureOffset = xCurrentMapPosition - (int)xCurrentMapPosition;
 				struct.texture = map.getWallTextureSlice(xCurrentMapSquare, yCurrentMapSquare, textureOffset);
-				struct.xWallHit = xCurrentMapPosition;
-				struct.yWallHit = yCurrentMapPosition;
+//				struct.xWallHit = xCurrentMapPosition;
+//				struct.yWallHit = yCurrentMapPosition;
 				return;
 				}
 			}
 		}
-	@SuppressWarnings("unused")
 	private class Wall
 		{
 		double distance;
-		double xWallHit;
-		double yWallHit;
+//		double xWallHit;
+//		double yWallHit;
 		BufferedImage texture;
 		
 		}

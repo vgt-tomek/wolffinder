@@ -148,6 +148,7 @@ public abstract class GameCore
 		}
 	protected void drawDebug(Graphics2D g)
 		{
+		Color currentColor = g.getColor();
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, 120, 60);
 		g.setColor(Color.GREEN);
@@ -167,6 +168,7 @@ public abstract class GameCore
 			}
 		g.drawString("FPS: " + fps, 5, 36);
 		g.drawString("TPS: " + tps, 5, 48);
+		g.setColor(currentColor);
 		}
 	public abstract void update(long elapsedTime);
 	public abstract void draw(Graphics2D g);

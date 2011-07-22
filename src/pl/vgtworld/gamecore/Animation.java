@@ -13,64 +13,64 @@ import java.util.List;
  */
 public class Animation
 	{
-	private List<AnimationFrame> oFrames;
-	private int iCurrentFrame;
-	private int iCurrentTime;
-	private int iAnimationDuration;
+	private List<AnimationFrame> frames;
+	private int currentFrame;
+	private int currentTime;
+	private int animationDuration;
 	public Animation()
 		{
-		oFrames = new ArrayList<AnimationFrame>();
-		iAnimationDuration = 0;
+		frames = new ArrayList<AnimationFrame>();
+		animationDuration = 0;
 		reset();
 		}
-	public void addFrame(Image oImage, int iDuration)
+	public void addFrame(Image image, int duration)
 		{
-		iAnimationDuration+= iDuration;
-		AnimationFrame oNewFrame = new AnimationFrame(oImage, iAnimationDuration);
-		oFrames.add(oNewFrame);
+		animationDuration+= duration;
+		AnimationFrame newFrame = new AnimationFrame(image, animationDuration);
+		frames.add(newFrame);
 		}
 	public void reset()
 		{
-		iCurrentFrame = 0;
-		iCurrentTime = 0;
+		currentFrame = 0;
+		currentTime = 0;
 		}
-	public void update(long iElapsedTime)
+	public void update(long elapsedTime)
 		{
-		if (oFrames.size() > 1)
+		if (frames.size() > 1)
 			{
-			iCurrentTime += iElapsedTime;
-			if (iCurrentTime > iAnimationDuration)
+			currentTime += elapsedTime;
+			if (currentTime > animationDuration)
 				{
-				iCurrentTime = iCurrentTime % iAnimationDuration;
-				iCurrentFrame = 0;
+				currentTime = currentTime % animationDuration;
+				currentFrame = 0;
 				}
-			while (oFrames.get(iCurrentFrame).getEndTime() < iCurrentTime)
-				++iCurrentFrame;
+			while (frames.get(currentFrame).getEndTime() < currentTime)
+				++currentFrame;
 			}
 		}
 	public Image getImage()
 		{
-		if (oFrames.size() == 0)
+		if (frames.size() == 0)
 			throw new IllegalStateException("no frames defined");
-		return oFrames.get(iCurrentFrame).getImage();
+		return frames.get(currentFrame).getImage();
 		}
 	}
 
 class AnimationFrame
 	{
-	private Image oImage;
-	private int iEndTime;
-	public AnimationFrame(Image oImage, int iEndTime)
+	private Image image;
+	private int endTime;
+	public AnimationFrame(Image image, int endTime)
 		{
-		this.oImage = oImage;
-		this.iEndTime = iEndTime;
+		this.image = image;
+		this.endTime = endTime;
 		}
 	public Image getImage()
 		{
-		return oImage;
+		return image;
 		}
 	public int getEndTime()
 		{
-		return iEndTime;
+		return endTime;
 		}
 	}

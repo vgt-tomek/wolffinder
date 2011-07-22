@@ -16,6 +16,7 @@ import pl.vgtworld.gamecore.Sprite;
 import pl.vgtworld.games.wolffinder.data.Constants;
 import pl.vgtworld.games.wolffinder.engine.WolfGameCore;
 import pl.vgtworld.games.wolffinder.gui.editor.EditorWindow;
+import pl.vgtworld.games.wolffinder.model.MapFileChooser;
 import pl.vgtworld.games.wolffinder.model.ResourceBundle;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 import pl.vgtworld.games.wolffinder.model.map.MapValidator;
@@ -32,7 +33,7 @@ public class MainWindow
 	private Menu menu = new Menu(this);
 	private Thread mainLoopThread = null;
 	private EditorWindow editorWindow = new EditorWindow(this);
-	private JFileChooser mapFileChooser = new JFileChooser();
+	private JFileChooser mapFileChooser = new MapFileChooser();
 	public MainWindow()
 		{
 		setTitle(rb.getString("name"));

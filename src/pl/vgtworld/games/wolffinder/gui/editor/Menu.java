@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import pl.vgtworld.games.wolffinder.gui.editor.newmap.NewMapDialog;
 import pl.vgtworld.games.wolffinder.gui.editor.validation.ValidationWindow;
+import pl.vgtworld.games.wolffinder.model.MapFileChooser;
 import pl.vgtworld.games.wolffinder.model.map.Map;
 
 public class Menu
@@ -32,7 +33,7 @@ public class Menu
 	private JButton buttonValidateMap = new JButton();
 	private NewMapDialog dialogNewMap = null;
 	private ValidationWindow windowValidation = null;
-	private JFileChooser fileChooser = new JFileChooser();
+	private JFileChooser mapFileChooser = new MapFileChooser();
 	public Menu(EditorWindow parent)
 		{
 		this.parent = parent;
@@ -120,10 +121,10 @@ public class Menu
 		private static final long serialVersionUID = 1L;
 		@Override public void actionPerformed(ActionEvent event)
 			{
-			int choice = fileChooser.showSaveDialog(parent);
+			int choice = mapFileChooser.showSaveDialog(parent);
 			if (choice == JFileChooser.APPROVE_OPTION)
 				{
-				File file = fileChooser.getSelectedFile();
+				File file = mapFileChooser.getSelectedFile();
 				ObjectOutputStream stream = null;
 				try
 					{
@@ -156,10 +157,10 @@ public class Menu
 					return;
 				}
 			
-			int choice = fileChooser.showOpenDialog(parent);
+			int choice = mapFileChooser.showOpenDialog(parent);
 			if (choice == JFileChooser.APPROVE_OPTION)
 				{
-				File file = fileChooser.getSelectedFile();
+				File file = mapFileChooser.getSelectedFile();
 				ObjectInputStream stream = null;
 				try
 					{

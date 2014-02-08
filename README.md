@@ -8,5 +8,6 @@ Project contains level editor, where you can create your own levels, and simple 
 
 Screenshots of game and level editor:
 
-http://blog.vgtworld.pl/wp-content/uploads/2013/10/wilk-edytor.png
-http://blog.vgtworld.pl/wp-content/uploads/2013/10/wilk-gameplay.png
+![Editor](http://blog.vgtworld.pl/wp-content/uploads/2013/10/wilk-edytor.png)
+
+![Gameplay](http://blog.vgtworld.pl/wp-content/uploads/2013/10/wilk-gameplay.png)
